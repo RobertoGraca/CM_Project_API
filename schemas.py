@@ -15,14 +15,14 @@ class CoordinatesCreate(CoordinatesBase):
 
 class Coordinates(CoordinatesBase):
     id: int
-    t_id: int
+    workout_id: int
 
     class Config:
         orm_mode = True
 
 
 class FriendBase(BaseModel):
-    f_id: int
+    friend_id: int
 
 
 class FriendCreate(FriendBase):
@@ -30,7 +30,7 @@ class FriendCreate(FriendBase):
 
 
 class Friend(FriendBase):
-    p_id: int
+    user_id: int
     id: int
 
     class Config:
@@ -50,7 +50,7 @@ class ImageIdentification(ImageBase):
 
 
 class Image(ImageIdentification):
-    t_id: int
+    workout_id: int
 
     class Config:
         orm_mode = True
@@ -65,13 +65,13 @@ class WorkoutBase(BaseModel):
 
 
 class WorkoutCreate(WorkoutBase):
-    #images: List[ImageCreate]
+    images: List[ImageIdentification]
     coords: List[CoordinatesCreate]
 
 
 class Workout(WorkoutBase):
     id: int
-    p_id: int
+    user_id: int
 
     class Config:
         orm_mode = True

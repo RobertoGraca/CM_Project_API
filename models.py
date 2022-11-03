@@ -20,7 +20,7 @@ class Workout(Base):
     __tablename__ = "workout"
 
     id = Column(Integer, primary_key=True, index=True)
-    p_id = Column(Integer, ForeignKey("people.id"))
+    user_id = Column(Integer, ForeignKey("people.id"))
     time = Column(Integer)
     distance = Column(Float)
     speed = Column(Float)
@@ -36,7 +36,7 @@ class Coordinates(Base):
     __tablename__ = "coords"
 
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)
-    t_id = Column(Integer, ForeignKey("workout.id"), index=True)
+    workout_id = Column(Integer, ForeignKey("workout.id"), index=True)
     latitude = Column(Float)
     longitude = Column(Float)
 
@@ -47,8 +47,8 @@ class Friend(Base):
     __tablename__ = "friends"
 
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)
-    p_id = Column(Integer, ForeignKey("people.id"), index=True)
-    f_id = Column(Integer, index=True)
+    user_id = Column(Integer, ForeignKey("people.id"), index=True)
+    friend_id = Column(Integer, index=True)
 
     my_friends = relationship("User", back_populates="friends_list")
 
@@ -57,7 +57,7 @@ class Image(Base):
     __tablename__ = "images"
 
     id = Column(Integer, primary_key=True, index=True)
-    t_id = Column(Integer, ForeignKey("workout.id"), index=True)
+    workout_id = Column(Integer, ForeignKey("workout.id"), index=True)
     image = Column(String)
     name = Column(String)
 
