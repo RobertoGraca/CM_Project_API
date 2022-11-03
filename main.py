@@ -55,7 +55,7 @@ def create_workout_for_user(
 
 @app.post("/workouts/{workout_id}/images", response_model=List[schemas.ImageBase])
 async def create_images_for_workout(
-        workout_id: int, images: List[UploadFile], db: Session = Depends(get_db)):
+        workout_id: int, images: List[schemas.ImageIdentification], db: Session = Depends(get_db)):
     return await crud.create_images(db=db, workout_id=workout_id, images=images)
 
 

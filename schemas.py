@@ -38,16 +38,18 @@ class Friend(FriendBase):
 
 
 class ImageBase(BaseModel):
-    id: int
     name: str
 
 
 class ImageCreate(ImageBase):
-    pass
+    id: int
 
 
-class Image(ImageBase):
+class ImageIdentification(ImageBase):
     image: str
+
+
+class Image(ImageIdentification):
     t_id: int
 
     class Config:

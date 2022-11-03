@@ -55,15 +55,15 @@ def create_friend(db: Session, p_id: int, f_id: int):
 
 
 # --------- IMAGE -----------
-async def create_images(db: Session, workout_id: int, images: List[UploadFile]):
+async def create_images(db: Session, workout_id: int, images: List[List[str]]):
     db_images = []
     for image in images:
         img = models.Image(
-            **{"image": str(await image.read())}, t_id=workout_id, name=image.filename)
+            image=image[1], t_id=workout_id, name=image[0])
         db.add(img)
         db.commit()
         db.refresh(img)
-        db_images.append(schemas.ImageBase(name=image.filename, id=img.id))
+        db_images.append(schemas.ImageCreate(name=img.name, id=img.id))
     return db_images
 # ----------------------- GET ---------------------------------
 
