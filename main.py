@@ -38,6 +38,15 @@ def read_user(user_id: int, db: Session = Depends(get_db)):
     return db_user
 
 
+@app.get("/login", response_model=schemas.User)
+def login_user(email: str, password: str, db: Session = Depends(get_db)):
+    db_user = crud.get_user_login(db, email=email, password=password)
+    if db_user is None:
+        raise HTTPException(
+            status_code=404, detail="Password or email are incorrect")
+    return db_user
+
+
 @app.post("/users/{user_id}/workouts/", response_model=schemas.Workout)
 def create_workout_for_user(
         user_id: int, workout: schemas.WorkoutCreate, db: Session = Depends(get_db)):
