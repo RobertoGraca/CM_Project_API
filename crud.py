@@ -1,7 +1,6 @@
 from typing import List
 from sqlalchemy.orm import Session
 from sqlalchemy import or_
-from fastapi import UploadFile
 import models
 import schemas
 
@@ -26,24 +25,18 @@ def create_workout(db: Session, workout: schemas.WorkoutCreate, user_id: int):
 
     db.add(db_workout)
     db.commit()
-    db.refresh(db_workout)
-
-    workout_id = db.query(models.Workout).filter(
-        models.Workout.user_id == user_id).order_by(models.Workout.date).first().id
 
     for image in workout.images:
         img = models.Image(
-            image=image.image, workout_id=workout_id, name=image.name)
+            image=image.image, workout_id=db_workout.id, name=image.name)
         db.add(img)
-        db.commit()
-        db.refresh(img)
 
     for coord in workout.coords:
         db_coords = models.Coordinates(
-            **{"latitude": coord.latitude, "longitude": coord.longitude}, workout_id=workout_id)
+            **{"latitude": coord.latitude, "longitude": coord.longitude}, workout_id=db_workout.id)
         db.add(db_coords)
-        db.commit()
-        db.refresh(db_coords)
+
+    db.commit()
 
     return db_workout
 
