@@ -71,16 +71,16 @@ def get_workout_coordinates(
     return crud.get_coords(db=db, workout_id=workout_id)
 
 
-@app.post("/friends", response_model=List[schemas.Friend])
+@app.post("/friends", response_model=schemas.User)
 def add_friend(user_id: int, friend_id: int, db: Session = Depends(get_db)):
     db_friend = crud.get_friends(db, user_id)
-    friend_list = [friend.friend_id for friend in db_friend]
+    friend_list = [friend.id for friend in db_friend]
     if friend_id in friend_list or user_id == friend_id:
         raise HTTPException(
             status_code=400, detail="Friend can not be registered")
-    return crud.create_friend(db=db, user_id=user_id, friend_id=friend_id)
+    return crud.get_user(db=db, user_id=crud.create_friend(db=db, user_id=user_id, friend_id=friend_id).friend_id)
 
 
-@app.get("/friends", response_model=List[schemas.FriendBase])
+@app.get("/friends", response_model=List[schemas.User])
 def get_friends(user_id: int, db: Session = Depends(get_db)):
     return crud.get_friends(db, user_id)

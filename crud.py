@@ -51,7 +51,7 @@ def create_friend(db: Session, user_id: int, friend_id: int):
     db.commit()
     db.refresh(db_friend)
     db.refresh(db_friend2)
-    return [db_friend, db_friend2]
+    return db_friend
 # ----------------------- GET ---------------------------------
 
 # -------- USER -----------
@@ -84,7 +84,12 @@ def get_feed(db: Session, user_id: int):
 
 # ------ FRIEND -------------
 def get_friends(db: Session, user_id: int):
-    return db.query(models.Friend.friend_id).filter(models.Friend.user_id == user_id).all()
+    query = db.query(models.Friend.friend_id).filter(
+        models.Friend.user_id == user_id).all()
+    friends = []
+    for friend in query:
+        friends.append(get_user(db=db, user_id=friend.friend_id))
+    return friends
 
 
 # -------- IMAGE ---------
